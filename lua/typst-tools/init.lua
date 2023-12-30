@@ -26,6 +26,10 @@ function typst.setup(opts)
 
     require("typst-tools.formatter").setup(typst.config.formatter)
 
+    if typst.config.lsp.enabled then
+        require("typst-tools.lsp").setup(typst.config.lsp)
+    end
+
     vim.api.nvim_create_autocmd("FileType", {
         pattern = "typst",
         callback = function()
