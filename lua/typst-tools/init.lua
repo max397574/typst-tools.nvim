@@ -1,8 +1,11 @@
 local typst = {}
 
-local config = {
+typst.config = {
     treesitter = true,
-    lsp = true,
+    lsp = {
+        enabled = true,
+        on_attach = function() end,
+    },
     formatter = {
         formatter_nvim = false,
         conform_nvim = false,
@@ -10,12 +13,18 @@ local config = {
 }
 
 function typst.setup(opts)
-    config = vim.tbl_deep_extend("force", config, opts or {})
-    if config.treesitter then
+    vim.filetype.add({
+        extension = {
+            typ = "typst",
+        },
+    })
+
+    typst.config = vim.tbl_deep_extend("force", typst.config, opts or {})
+    if typst.config.treesitter then
         require("typst-tools.treesitter").setup()
     end
 
-    require("typst-tools.formatter").setup(config.formatter)
+    require("typst-tools.formatter").setup(typst.config.formatter)
 
     vim.api.nvim_create_autocmd("FileType", {
         pattern = "typst",
