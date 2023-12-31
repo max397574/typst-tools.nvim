@@ -29,6 +29,9 @@ local function create_default_mappings()
             vim.keymap.set("n", "[[", function()
                 require("typst-tools.utils").jump_to_previous_heading()
             end, { buffer = true })
+            vim.keymap.set("n", "gO", function()
+                require("typst-tools.utils").heading_loclist()
+            end, { buffer = true })
         end,
     })
 end
