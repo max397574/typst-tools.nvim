@@ -5,25 +5,31 @@ function typst_formatter.setup(opts)
         return
     end
 
-    if opts.formatter_nvim then
-        require("formatter").setup({
-            filetype = {
-                function()
-                    vim.cmd.w()
-                    return {
-                        exe = "typstfmt",
-                        args = { vim.fn.expand("%"), "-o", "-" },
-                        stdin = true,
-                    }
-                end,
-            },
-        })
-    end
-
     if opts.conform_nvim then
         require("conform").setup({
             formatters_by_ft = {
                 typst = { "typstfmt" },
+            },
+        })
+    end
+
+    if opts.formatter_nvim then
+        -- currently disabled because formatter.nvim will overwrite all previous configs
+        if true then
+            return
+        end
+        require("formatter").setup({
+            filetype = {
+                typst = {
+                    function()
+                        vim.cmd.w()
+                        return {
+                            exe = "typstfmt",
+                            args = { vim.fn.expand("%"), "-o", "-" },
+                            stdin = true,
+                        }
+                    end,
+                },
             },
         })
     end
