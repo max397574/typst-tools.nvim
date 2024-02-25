@@ -10,6 +10,9 @@ typst.config = {
         formatter_nvim = false,
         conform_nvim = false,
     },
+    context = {
+        enabled = true,
+    },
     default_mappings = true,
 }
 
@@ -58,6 +61,11 @@ function typst.setup(opts)
 
     if typst.config.default_mappings then
         create_default_mappings()
+    end
+
+    if typst.config.context.enabled then
+        require("typst-tools.context").load()
+        require("typst-tools.context").enable()
     end
 
     vim.api.nvim_create_autocmd("FileType", {
