@@ -1,7 +1,7 @@
 local typst = {}
 
 typst.config = {
-    treesitter = true,
+    -- treesitter = true,
     lsp = {
         enabled = false,
         on_attach = function() end,
@@ -47,9 +47,9 @@ function typst.setup(opts)
     })
 
     typst.config = vim.tbl_deep_extend("force", typst.config, opts or {})
-    if typst.config.treesitter then
-        require("typst-tools.treesitter").setup()
-    end
+    -- if typst.config.treesitter then
+    --     require("typst-tools.treesitter").setup()
+    -- end
 
     require("typst-tools.formatter").setup(typst.config.formatter)
 
