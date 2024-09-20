@@ -89,7 +89,7 @@ local function jump_to_previous_query_match(query_string)
     end
     if final_node then
         ---@diagnostic disable-next-line: undefined-global
-        require("nvim-treesitter.ts_utils").goto_node(node)
+        require("nvim-treesitter.ts_utils").goto_node(final_node)
     end
 end
 

@@ -39,23 +39,17 @@ local function create_default_mappings()
     })
 end
 
-function typst.setup(opts)
-    vim.filetype.add({
-        extension = {
-            typ = "typst",
-        },
-    })
-
+function typst.initialize(opts)
     typst.config = vim.tbl_deep_extend("force", typst.config, opts or {})
     -- if typst.config.treesitter then
     --     require("typst-tools.treesitter").setup()
     -- end
 
-    require("typst-tools.formatter").setup(typst.config.formatter)
-
     if typst.config.lsp.enabled then
         require("typst-tools.lsp").setup(typst.config.lsp)
     end
+
+    require("typst-tools.snippets").setup()
 
     create_commands()
 
@@ -67,15 +61,6 @@ function typst.setup(opts)
         require("typst-tools.context").load()
         require("typst-tools.context").enable()
     end
-
-    vim.api.nvim_create_autocmd("FileType", {
-        pattern = "typst",
-        callback = function()
-            vim.bo.commentstring = "// %s"
-            vim.cmd.TSBufEnable("highlight")
-            vim.bo.shiftwidth = 2
-        end,
-    })
 end
 
 return typst
