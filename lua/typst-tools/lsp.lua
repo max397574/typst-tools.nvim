@@ -14,8 +14,8 @@ function typst_lsp.setup(opts)
         pattern = "typst",
         callback = function(args)
             vim.lsp.start({
-                name = "typst-lsp",
-                cmd = { "typst-lsp" },
+                name = "tinymist",
+                cmd = { "tinymist" },
                 root_dir = vim.fs.dirname(vim.api.nvim_buf_get_name(args.buf)),
                 autostart = true,
                 settings = {

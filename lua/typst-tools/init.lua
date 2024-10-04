@@ -1,21 +1,5 @@
 local typst = {}
 
-typst.config = {
-    -- treesitter = true,
-    lsp = {
-        enabled = false,
-        on_attach = function() end,
-    },
-    formatter = {
-        formatter_nvim = false,
-        conform_nvim = false,
-    },
-    context = {
-        enabled = true,
-    },
-    default_mappings = true,
-}
-
 local function create_commands()
     vim.api.nvim_create_user_command("TypstToc", function()
         require("typst-tools.utils").heading_loclist()
@@ -39,25 +23,34 @@ local function create_default_mappings()
     })
 end
 
-function typst.initialize(opts)
-    typst.config = vim.tbl_deep_extend("force", typst.config, opts or {})
-    -- if typst.config.treesitter then
-    --     require("typst-tools.treesitter").setup()
-    -- end
+function typst.setup(opts)
+    require("typst-tools.config").setup(opts)
+end
 
-    if typst.config.lsp.enabled then
-        require("typst-tools.lsp").setup(typst.config.lsp)
+function typst.initialize()
+    local config = require("typst-tools.config").options
+    create_commands()
+
+    if config.formatter.conform_nvim then
+        require("conform").setup({
+            formatters_by_ft = {
+                -- TODO: check if they are available
+                typst = config.formatter.formatters,
+            },
+        })
+    end
+
+    if config.lsp.enabled then
+        require("typst-tools.lsp").setup(config.lsp)
     end
 
     require("typst-tools.snippets").setup()
 
-    create_commands()
-
-    if typst.config.default_mappings then
+    if config.default_mappings then
         create_default_mappings()
     end
 
-    if typst.config.context.enabled then
+    if config.context.enabled then
         require("typst-tools.context").load()
         require("typst-tools.context").enable()
     end
