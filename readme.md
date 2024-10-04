@@ -8,6 +8,7 @@
   - gO to open ToC for current buffer
 - automatically set up lsp
 - automaticall set up formatter (not by default)
+- snippets
 
 # Requirements
 
