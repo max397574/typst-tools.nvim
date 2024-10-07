@@ -23,27 +23,21 @@ function typst_context.toggle()
 end
 
 local function get_contexts()
-    local node
-    -- TODO: remove after 0.10 release
-    if not vim.treesitter.get_node then
-        node = ts_utils.get_node_at_cursor(0, true)
-    else
-        node = vim.treesitter.get_node()
-    end
+    local node = vim.treesitter.get_node()
     local lines = {}
     local heading_nodes = {}
 
     local function is_valid(potential_node)
         local topline = vim.fn.line("w0")
         local row = potential_node:start()
-        return row <= (topline + #heading_nodes)
+        return row <= (topline + #heading_nodes - 1)
     end
 
-    local function validate_heading_nodes()
-        local valid_heading_nodes = heading_nodes
-        for i = #heading_nodes, 1, -1 do
-            if not is_valid(valid_heading_nodes[i]) then
-                table.remove(valid_heading_nodes, i)
+    local function validate_heading_nodes(nodes)
+        local valid_heading_nodes = {}
+        for _, heading_node in ipairs(nodes) do
+            if is_valid(heading_node) then
+                table.insert(valid_heading_nodes, heading_node)
             end
         end
         return valid_heading_nodes
@@ -63,7 +57,7 @@ local function get_contexts()
             break
         end
     end
-    heading_nodes = validate_heading_nodes()
+    heading_nodes = validate_heading_nodes(heading_nodes)
     local title_nodes = {}
     for _, heading_node in ipairs(heading_nodes) do
         table.insert(title_nodes, heading_node:named_child(0))
@@ -129,9 +123,7 @@ local function open_win()
         })
     end
 
-    -- TODO: use this after next neovim release
-    -- vim.api.nvim_set_option_value("winhl","NormalFloat:NeorgContext",{win=winnr})
-    vim.api.nvim_win_set_option(winnr, "winhl", "NormalFloat:TypstContext")
+    vim.api.nvim_set_option_value("winhl", "NormalFloat:NeorgContext", { win = winnr })
 end
 
 local function update_window()

@@ -73,11 +73,28 @@ function snippets.matrices()
                 "mat(a_(1,1), a_(1,2), ..., a_(1,n);a_(2,1), a_(2,2), ..., a_(2,n);dots.v, dots.v, dots.down, dots.v;a_(m,1), a_(m,2), ..., a_(m,n);)",
             }),
         }),
+        s(math_snip("mat"), {
+            c(1, {
+                sn(1, fmt("mat({},{};{},{})", { i(1), i(2), i(3), i(4) })),
+                sn(2, fmt("mat({},{},{};{},{},{};{},{},{})", { i(1), i(2), i(3), i(4), i(5), i(6), i(7), i(8), i(9) })),
+            }),
+        }),
+    })
+end
+
+function snippets.colors()
+    ls.add_snippets("typst", {
+        s(math_snip("red"), fmt("#text(red)[{}]", { i(1) })),
+        s(math_snip("blue"), fmt("#text(blue)[{}]", { i(1) })),
+        s(math_snip("green"), fmt("#text(green)[{}]", { i(1) })),
+        s(math_snip("orange"), fmt("#text(orange)[{}]", { i(1) })),
+        s(math_snip("yellow"), fmt("#text(yellow)[{}]", { i(1) })),
     })
 end
 
 function snippets.general()
     ls.add_snippets("typst", {
+        s("rqed", { t("#h(1fr) $qed$") }),
         s(math_snip("vec"), {
             c(1, {
                 sn(1, fmt("vec({}, {})", { i(1), i(2) })),
@@ -103,12 +120,38 @@ function snippets.general()
             }),
         }),
         s(
+            math_snip("liminf"),
+            fmt("limits(lim)_({}->oo)", {
+                i(1, "n"),
+            })
+        ),
+        s(
+            math_snip("raw"),
+            fmt('#raw("{}")', {
+                i(1),
+            })
+        ),
+        s(
+            math_snip("color"),
+            fmt("#text({})[{}]", {
+                i(1, "red"),
+                i(2),
+            })
+        ),
+        s(
             math_snip("seq"),
             fmt("{}_1, {}_2, ..., {}_{}", {
                 i(1, "a"),
                 reuse(1),
                 reuse(1),
                 i(2, "n"),
+            })
+        ),
+        s(
+            math_snip("bico"),
+            fmt('vec(delim: "(", {}, {})', {
+                i(1, "n"),
+                i(2, "k"),
             })
         ),
         s(

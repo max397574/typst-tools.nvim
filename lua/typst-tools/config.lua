@@ -24,6 +24,7 @@ config.defaults = {
             modules = {
                 "general",
                 "matrices",
+                "colors",
             },
         },
     },
