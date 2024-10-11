@@ -19,12 +19,15 @@ config.defaults = {
     },
     default_mappings = true,
     snippets = {
+        general = {
+            enabled = true,
+            modules = { "colors" },
+        },
         math = {
             enabled = true,
             modules = {
                 "general",
                 "matrices",
-                "colors",
             },
         },
     },

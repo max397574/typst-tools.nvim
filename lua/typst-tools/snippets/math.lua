@@ -82,16 +82,6 @@ function snippets.matrices()
     })
 end
 
-function snippets.colors()
-    ls.add_snippets("typst", {
-        s(math_snip("red"), fmt("#text(red)[{}]", { i(1) })),
-        s(math_snip("blue"), fmt("#text(blue)[{}]", { i(1) })),
-        s(math_snip("green"), fmt("#text(green)[{}]", { i(1) })),
-        s(math_snip("orange"), fmt("#text(orange)[{}]", { i(1) })),
-        s(math_snip("yellow"), fmt("#text(yellow)[{}]", { i(1) })),
-    })
-end
-
 function snippets.general()
     ls.add_snippets("typst", {
         s("rqed", { t("#h(1fr) $qed$") }),
@@ -131,13 +121,7 @@ function snippets.general()
                 i(1),
             })
         ),
-        s(
-            math_snip("color"),
-            fmt("#text({})[{}]", {
-                i(1, "red"),
-                i(2),
-            })
-        ),
+        s(math_snip("*"), { t("dot") }),
         s(
             math_snip("seq"),
             fmt("{}_1, {}_2, ..., {}_{}", {
