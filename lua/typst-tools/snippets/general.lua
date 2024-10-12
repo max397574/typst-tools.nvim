@@ -32,6 +32,20 @@ local function reuse(idx)
 end
 
 local snippets = {}
+function snippets.general()
+    ls.add_snippets("typst", {
+        s(
+            "fig",
+            fmt(
+                [[#figure(
+    image("{}", width: 100%),
+    caption: [{}],
+  ) <{}>]],
+                { i(1), i(2), i(3) }
+            )
+        ),
+    })
+end
 
 function snippets.colors()
     ls.add_snippets("typst", {

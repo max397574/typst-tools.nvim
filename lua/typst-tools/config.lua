@@ -21,7 +21,7 @@ config.defaults = {
     snippets = {
         general = {
             enabled = true,
-            modules = { "colors" },
+            modules = { "general", "colors" },
         },
         math = {
             enabled = true,
