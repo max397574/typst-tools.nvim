@@ -31,6 +31,16 @@ local function reuse(idx)
     end, { idx })
 end
 
+local rec_ls
+rec_ls = function()
+    return sn(nil, {
+        c(1, {
+            t({ "" }),
+            sn(nil, { t({ "", "- " }), i(1), d(2, rec_ls, {}) }),
+        }),
+    })
+end
+
 local snippets = {}
 function snippets.general()
     ls.add_snippets("typst", {
@@ -44,6 +54,112 @@ function snippets.general()
                 { i(1), i(2), i(3) }
             )
         ),
+        s(
+            "table",
+            fmt(
+                [[#table(
+  columns: {},
+  {}
+)]],
+                { i(1), i(2) }
+            )
+        ),
+
+        s("ls", {
+            t("- "),
+            i(1),
+            d(2, rec_ls, {}),
+        }),
+
+        s({ trig = "table(%d+)x(%d+)", regTrig = true }, {
+            d(1, function(args, snip)
+                local nodes = {
+                    t({ "#table(", "" }),
+                    t({ "  columns: " .. snip.captures[2] .. ",", "" }),
+                }
+                local i_counter = 0
+                local hlines = ""
+                table.insert(nodes, t("table.header("))
+                for _ = 1, snip.captures[2] - 1 do
+                    i_counter = i_counter + 1
+                    table.insert(nodes, t("["))
+                    table.insert(nodes, i(i_counter, "Column" .. i_counter))
+                    table.insert(nodes, t("],"))
+                end
+                i_counter = i_counter + 1
+                table.insert(nodes, t("["))
+                table.insert(nodes, i(i_counter, "Column" .. i_counter))
+                table.insert(nodes, t("]),"))
+                table.insert(nodes, t({ "" }))
+                table.insert(nodes, t({ hlines, "" }))
+                for _ = 1, snip.captures[1] do
+                    for _ = 1, snip.captures[2] do
+                        i_counter = i_counter + 1
+                        table.insert(nodes, t("["))
+                        table.insert(nodes, i(i_counter))
+                        table.insert(nodes, t("], "))
+                    end
+                    table.insert(nodes, t({ "", "" }))
+                end
+                table.insert(nodes, t(")"))
+                return sn(nil, nodes)
+            end),
+        }),
+
+        s({ trig = "table(%d+)", regTrig = true }, {
+            d(1, function(args, snip)
+                local columns = snip.captures[1]
+                local nodes = {
+                    t({ "#table(", "" }),
+                    t({ "  columns: " .. columns .. ",", "" }),
+                }
+                local i_counter = 0
+                local hlines = ""
+                table.insert(nodes, t("table.header("))
+                for _ = 1, columns - 1 do
+                    i_counter = i_counter + 1
+                    table.insert(nodes, t("["))
+                    table.insert(nodes, i(i_counter, "Column" .. i_counter))
+                    table.insert(nodes, t("],"))
+                end
+                i_counter = i_counter + 1
+                table.insert(nodes, t("["))
+                table.insert(nodes, i(i_counter, "Column" .. i_counter))
+                table.insert(nodes, t("]),"))
+                table.insert(nodes, t({ "" }))
+                table.insert(nodes, t({ hlines, "" }))
+
+                for _ = 1, columns do
+                    i_counter = i_counter + 1
+                    table.insert(nodes, t("["))
+                    table.insert(nodes, i(i_counter))
+                    table.insert(nodes, t("], "))
+                end
+
+                local rec_table_row
+                rec_table_row = function()
+                    local row_nodes = {}
+                    for _ = 1, columns do
+                        i_counter = i_counter + 1
+                        table.insert(row_nodes, t("["))
+                        table.insert(row_nodes, i(i_counter))
+                        table.insert(row_nodes, t("], "))
+                    end
+                    table.insert(row_nodes, d(i_counter + 1, rec_table_row, {}))
+                    return sn(nil, {
+                        c(1, {
+                            t({ "" }),
+                            sn(nil, row_nodes),
+                        }),
+                    })
+                end
+
+                table.insert(nodes, sn(nil, { d(1, rec_table_row, {}) }))
+                table.insert(nodes, t({ "", "" }))
+                table.insert(nodes, t(")"))
+                return sn(nil, nodes)
+            end),
+        }),
     })
 end
 

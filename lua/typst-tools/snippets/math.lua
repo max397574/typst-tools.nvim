@@ -57,20 +57,73 @@ local function math_snip(trigger)
     }
 end
 
+local function math_auto_snip(trigger)
+    return {
+        trig = trigger,
+        condition = function()
+            return in_math()
+        end,
+        show_condition = function()
+            return in_math()
+        end,
+        snippetType = "autosnippet",
+    }
+end
+
 local snippets = {}
+
+function snippets.autosnips()
+    ls.add_snippets("typst", {
+        s(math_auto_snip("xx"), fmt("times ", {})),
+        s(math_auto_snip("^^"), fmt("^({})", { i(1) })),
+        s(math_auto_snip("__"), fmt("_({})", { i(1) })),
+    })
+end
+
 function snippets.matrices()
     ls.add_snippets("typst", {
         s(
             math_snip("rowmat"),
             fmt("mat(-, {}_1, -; -, {}_2, -;,dots.v,;-, {}_n, -)", { i(1, "a"), reuse(1), reuse(1) })
         ),
+        s(math_snip("Rmat"), fmt("RR^({} times {})", { i(1, "m"), i(2, "n") })),
         s(
             math_snip("colmat"),
             fmt("mat(|, |, , |;{}_1, {}_2, ..., {}_n;|, |, , |)", { i(1, "a"), reuse(1), reuse(1) })
         ),
         s(math_snip("genmat"), {
-            t({
-                "mat(a_(1,1), a_(1,2), ..., a_(1,n);a_(2,1), a_(2,2), ..., a_(2,n);dots.v, dots.v, dots.down, dots.v;a_(m,1), a_(m,2), ..., a_(m,n);)",
+            c(1, {
+                sn(
+                    1,
+                    fmt(
+                        "mat({}_(1,1), {}_(1,2), ..., {}_(1,n);{}_(2,1), {}_(2,2), ..., {}_(2,n);dots.v, dots.v, dots.down, dots.v;{}_(m,1), {}_(m,2), ..., {}_(m,n);)",
+                        { i(1, "a"), reuse(1), reuse(1), reuse(1), reuse(1), reuse(1), reuse(1), reuse(1), reuse(1) }
+                    )
+                ),
+                sn(
+                    2,
+                    fmt(
+                        "mat({}_(1,1), {}_(1,2), {}_(1,3), ..., {}_(1,n);{}_(2,1), {}_(2,2), {}_(2,3), ..., {}_(2,n);{}_(3,1), {}_(3,2), {}_(3,3), ..., {}_(3,n);dots.v, dots.v,dots.v, dots.down, dots.v;{}_(m,1), {}_(m,2),{}_(m,3), ..., {}_(m,n);)",
+                        {
+                            i(1, "a"),
+                            reuse(1),
+                            reuse(1),
+                            reuse(1),
+                            reuse(1),
+                            reuse(1),
+                            reuse(1),
+                            reuse(1),
+                            reuse(1),
+                            reuse(1),
+                            reuse(1),
+                            reuse(1),
+                            reuse(1),
+                            reuse(1),
+                            reuse(1),
+                            reuse(1),
+                        }
+                    )
+                ),
             }),
         }),
         s(math_snip("mat"), {
@@ -85,6 +138,7 @@ end
 function snippets.general()
     ls.add_snippets("typst", {
         s("rqed", { t("#h(1fr) $qed$") }),
+        s(math_snip("mod"), fmt("scripts(equiv)_{}", i(1))),
         s(math_snip("vec"), {
             c(1, {
                 sn(1, fmt("vec({}, {})", { i(1), i(2) })),

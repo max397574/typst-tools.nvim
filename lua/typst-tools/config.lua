@@ -28,6 +28,7 @@ config.defaults = {
             modules = {
                 "general",
                 "matrices",
+                "autosnips",
             },
         },
     },
