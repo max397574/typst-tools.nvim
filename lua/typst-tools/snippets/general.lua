@@ -41,6 +41,19 @@ rec_ls = function()
     })
 end
 
+local rec_tbl_cell
+rec_tbl_cell = function()
+    return sn(nil, {
+        c(1, {
+            t({ "" }),
+            sn(nil, {
+                c(1, { sn(nil, { t("["), i(1), t("],") }), sn(nil, { t("[$"), i(1), t("$],") }) }),
+                d(2, rec_tbl_cell, {}),
+            }),
+        }),
+    })
+end
+
 local snippets = {}
 function snippets.general()
     ls.add_snippets("typst", {
@@ -58,10 +71,10 @@ function snippets.general()
             "table",
             fmt(
                 [[#table(
-  columns: {},
-  {}
+ columns: {},
+ {}
 )]],
-                { i(1), i(2) }
+                { i(1), d(2, rec_tbl_cell, {}) }
             )
         ),
 

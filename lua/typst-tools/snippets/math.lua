@@ -54,18 +54,20 @@ local function math_snip(trigger)
         show_condition = function()
             return in_math()
         end,
+        wordTrig = true,
     }
 end
 
 local function math_auto_snip(trigger)
     return {
         trig = trigger,
-        condition = function()
-            return in_math()
-        end,
-        show_condition = function()
-            return in_math()
-        end,
+        -- condition = function()
+        --     return in_math()
+        -- end,
+        -- show_condition = function()
+        --     return in_math()
+        -- end,
+        wordTrig = false,
         snippetType = "autosnippet",
     }
 end
@@ -130,6 +132,7 @@ function snippets.matrices()
             c(1, {
                 sn(1, fmt("mat({},{};{},{})", { i(1), i(2), i(3), i(4) })),
                 sn(2, fmt("mat({},{},{};{},{},{};{},{},{})", { i(1), i(2), i(3), i(4), i(5), i(6), i(7), i(8), i(9) })),
+                sn(3, fmt("mat({})", { i(1) })),
             }),
         }),
     })
@@ -137,6 +140,9 @@ end
 
 function snippets.general()
     ls.add_snippets("typst", {
+        s(math_snip("xx"), fmt("times ", {})),
+        s(math_snip("^^"), fmt("^({})", { i(1) })),
+        s(math_snip("__"), fmt("_({})", { i(1) })),
         s("rqed", { t("#h(1fr) $qed$") }),
         s(math_snip("mod"), fmt("scripts(equiv)_{}", i(1))),
         s(math_snip("vec"), {
